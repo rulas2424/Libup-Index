@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     <link rel="icon" type="image/png" href="img/favi.png">
+    <title>Libup-Registro</title>
+
+    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="css/style2.css">
+</head>
+<body>
+
+    <div class="main">
+       <div id="subscribe" class="subscribe-section">
+        <section class="signup">
+            <div class="container">
+                <div class="signup-content">
+                    <div class="signup-form">
+                        <h2 class="form-title">Registrate</h2>
+                        <form action="#" class="subscribe-form">
+                            <div class="form-group">
+                                <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="text"  id="txtCommerce" placeholder="Nombre del comercio"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="name"><i class="zmdi zmdi-view-web"></i></label>
+                                <input type="text"  id="txtUrl" placeholder="Pagina web"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="name"><i class="zmdi zmdi-face"></i></label>
+                                <input type="text" id="txtName" placeholder="Nombres"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="name"><i class="zmdi zmdi-face"></i></label>
+                                <input type="text" id="txtLastName"  placeholder="Apellidos"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="email"><i class="zmdi zmdi-email"></i></label>
+                                <input type="email"  id="txtEmail" placeholder="correo electrónico"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="text"><i class="zmdi zmdi-dialpad"></i></label>
+                                <input type="text"  id="txtPhone" placeholder="Número télefonico a 10 dígitos"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                                <input type="password"  id="txtPassword" placeholder="Contraseña"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
+                                <input type="password" name="re_pass" id="re_pass" placeholder="Repite tu contraseña"/>
+                            </div>
+                            <div class="form-group">
+                                <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
+                                <label for="agree-term" class="label-agree-term"><span><span></span></span>
+                                Estoy de acuerdo con todas las declaraciones en  <a href="#" class="term-service">Términos de servicio
+                                </a></label>
+                            </div>
+                            <div class="form-group form-button">
+                                <input type="button"  class="form-submit submit" value="Registrar" onclick="saveCommerce()"/>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="signup-image">
+                        <figure><img src="images/signup-image.jpg" alt="sing up image"></figure>
+                        <a href="login.html" class="signup-image-link">¿Ya tienes una cuenta?Ingresa aquí</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="js/vendor/jquery-1.12.4.min.js"></script>
+    <!-- Bootstrap JS -->
+
+    <script src="js/vendor/jquery.ajaxchimp.min.js"></script>
+    <!-- Swiper JS -->
+    <script src="js/vendor/swiper.min.js"></script>
+    <!-- wow JS -->
+    <script src="js/vendor/wow.min.js"></script>
+    <!-- Tilt JS -->
+    <script src="js/vendor/tilt.jquery.min.js"></script>
+    <!-- Slicknav JS -->
+    <script src="js/vendor/jquery.slicknav.min.js"></script>
+    <!-- Main JS -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>
+
+    <script>
+        function saveCommerce() {
+
+
+            var commerce = $("#txtCommerce").val();
+            var urlCommerce = $("#txtUrl").val();
+            var name = $("#txtName").val();
+            var lastName = $("#txtLastName").val();
+            var email = $("#txtEmail").val();
+            var password = $("#txtPassword").val();
+            var phoneNumber = $("#txtPhone").val();
+            var passhash = CryptoJS.MD5(password).toString();
+
+            if (commerce == "") {
+                alert("Debes ingresar el nombre del comercio.")
+            } else if (name == "") {
+                alert("Debes ingresar tu nombre.")
+            } else if (lastName == "") {
+                alert("Debes ingresar tu apellido.")
+            } else if (email == "") {
+                alert("Debes ingresar un email.")
+            } else if (password == "") {
+                alert("Debes ingresar una contraseña.")
+            } else if (password.length < 6) {
+                alert("Debes ingresar una contraseña mayor a 4 caracteres.")
+            } else if (phoneNumber == "") {
+                alert("Debes ingresar un teléfono.")
+            } else if (phoneNumber.length != 10) {
+                alert("Debes ingresar una teléfono de 10 caracteres.")
+            } else {
+                $.LoadingOverlay("show");
+                //console.log("password: " + passhash);
+                var sendingData = {
+                    commerce: commerce,
+                    urlCommerce: urlCommerce,
+                    name: name,
+                    lastName: lastName,
+                    email: email,
+                    password: passhash,
+                    phoneNumber: phoneNumber
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'https://libup.mx:8443/libup-api-0.0.1-SNAPSHOT/api/v1/commerce/addCommerce',
+                    contentType: "application/json",
+                    dataType: "json",
+                    crossDomain: true,
+                    crossOrigin: true,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+                        xhr.setRequestHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
+                        xhr.withCredentials = true;
+                    },
+                    data: JSON.stringify(sendingData),
+                    cache: false,
+                    success: function (data) {
+                        $.LoadingOverlay("hide");
+                        $('#subscribe-result').addClass('subs-result');
+                        $('#videoTutorial').show();
+                        $('.subscription-success').text(data.header.message + "<br>No olvides ver el video tutorial.").fadeIn();
+                        $('.subscription-error').fadeOut();
+                        window.location.replace("exito.html");
+                    },
+                    error: function (data) {
+                        $.LoadingOverlay("hide");
+                        $('#subscribe-result').addClass('subs-result');
+                        $('.subscription-error').text(data.header.message).fadeIn();
+                        $('.subscription-success').fadeOut();
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
